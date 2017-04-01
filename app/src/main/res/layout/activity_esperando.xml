@@ -11,10 +11,10 @@
     tools:context="com.example.estudiante.myapplication.Esperando">
 
     <TextView
-        android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/esperando"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/esperando" />
+        android:text="Bienvenido" />
 </RelativeLayout>

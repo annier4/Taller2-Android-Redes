@@ -266,7 +266,8 @@ public class Comunicacion extends Observable implements Runnable {
     public static Comunicacion getInstance(){
         if(ref==null){
             ref= new Comunicacion();
-            new Thread(ref).start();
+            Thread t =  new Thread(ref);
+            t.start();
         }
         return ref;
     }

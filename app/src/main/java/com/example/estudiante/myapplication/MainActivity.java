@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     Button enemigo;
     Button comida;
     Spinner usuarios;
-    ArrayList<Jugador> jugadores;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
