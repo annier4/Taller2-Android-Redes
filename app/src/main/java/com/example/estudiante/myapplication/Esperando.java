@@ -20,9 +20,8 @@ public class Esperando extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_esperando);
         //com.getInstance().addObserver(this);
-        com= new Comunicacion();
-        //Thread t =  new Thread(com);
-        //t.start();
+
+        new Async().execute();
         esperando = (TextView) findViewById(R.id.esperando);
         jugadores = new ArrayList<>();
         mensajeEsperando();
@@ -44,6 +43,8 @@ public class Esperando extends AppCompatActivity implements Observer {
 
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
+        } else {
+
         }
     }
 }

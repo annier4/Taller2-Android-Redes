@@ -74,12 +74,8 @@ public class Comunicacion extends Observable implements Runnable {
         System.out.println("hola soy un nuevo miembro");
         AutoId mensaje = new AutoId("hola soy un nuevo miembro");
         byte[] bytes = serializa(mensaje);
-        try {
             enviarMensaje(bytes, ip, puerto);
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO: handle exception
-        }
+
     }
 
     private void recibeRespuesta() throws Exception {
@@ -127,13 +123,8 @@ public class Comunicacion extends Observable implements Runnable {
     private void respuestaSaludo() {
         AutoId mensaje = new AutoId("Hola, yo soy:" + identificador);
         byte[] bytes = serializa(mensaje);
-
-        try {
             enviarMensaje(bytes, ip, puerto);
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO: handle exception
-        }
+
     }
 
     private byte[] serializa(Object data) {
@@ -177,12 +168,19 @@ public class Comunicacion extends Observable implements Runnable {
         return data;
     }
 
-    public void enviarMensaje(byte[] data, InetAddress ip2, int puerto2) throws IOException {
-        DatagramPacket paquete = new DatagramPacket(data, data.length, ip2, puerto2);
-        System.out.println("Enviando dato a:" + ip2.getHostAddress() + ":" + puerto2);
-        socket.send(paquete);
-        System.out.println("Los datos fueron enviados");
+    public void enviarMensaje(byte[] data, InetAddress ip2, int puerto2) {
+        try{
+            DatagramPacket paquete = new DatagramPacket(data, data.length, ip, puerto2);
+            //System.out.print(ip2+"....................................................................................................................................................................}");
+            //System.out.println("Enviando dato a:" + ip2.getHostAddress() + ":" + puerto2);
+            socket.send(paquete);
+            System.out.println("Los datos fueron enviados");
 
+        }
+        catch(Exception e){
+         e.printStackTrace();
+
+    }
         // TODO Auto-generated method stub
 
     }
@@ -273,14 +271,10 @@ public class Comunicacion extends Observable implements Runnable {
     }
 
     public void enviarMensaje(Object mensaje) {
-        try {
+
             System.out.println("Enviar mensaje a Jugadores");
             byte[] bytes = serializa(mensaje);
             enviarMensaje(bytes, ip, puerto);
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO: handle exception
-        }
 
     }
 }
