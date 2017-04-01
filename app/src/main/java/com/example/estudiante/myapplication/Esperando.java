@@ -20,6 +20,9 @@ public class Esperando extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_esperando);
         //com.getInstance().addObserver(this);
+        com= new Comunicacion();
+        //Thread t =  new Thread(com);
+        //t.start();
         esperando = (TextView) findViewById(R.id.esperando);
         jugadores = new ArrayList<>();
         mensajeEsperando();

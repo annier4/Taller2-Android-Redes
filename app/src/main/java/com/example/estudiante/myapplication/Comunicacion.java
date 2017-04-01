@@ -17,7 +17,7 @@ import java.util.Observable;
  */
 
 public class Comunicacion extends Observable implements Runnable {
-    private final int puerto = 5000;
+    private final int puerto = 5002;
     private MulticastSocket socket;
     private final String GROUP_ADDRESS = "224.2.2.2";
     private InetAddress ip;
