@@ -31,7 +31,7 @@ public class Esperando extends AppCompatActivity implements Observer {
     public void update(Observable o, Object arg) {
         System.out.print("llego algo:"+arg);
         if(arg instanceof AutoId){
-            System.out.println("Llego algo de Autoid");
+            System.out.println("Llego algo de Autoid"); //verificación
         }
     }
 
