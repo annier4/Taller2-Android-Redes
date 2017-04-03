@@ -30,6 +30,9 @@ public class Esperando extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         System.out.print("llego algo:"+arg);
+        if(arg instanceof AutoId){
+            System.out.println("Llego algo de Autoid");
+        }
     }
 
     public void mensajeEsperando(){

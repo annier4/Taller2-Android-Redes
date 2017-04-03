@@ -51,13 +51,14 @@ public class Comunicacion extends Observable implements Runnable {
 
         try {
             // DEFINE CUANTO TIEMPO ESPERA
-            socket.setSoTimeout(3000);// 3 SEGUNDOS
+            socket.setSoTimeout(5000);// 3 SEGUNDOS
             // SI 'IDENTIFICADO' ES FALSO ENTONCES RECIBE RESPUESTA : Es decir aun no esta identificado indentifiquese
             while (!identificado) {
                 recibeRespuesta();
             }
             // SI YA SE IDENTIFICO ENVIA UN MENSAJE CON SU ID AL GRUPO
             if(identificado){
+                System.out.println("Mi ID es:"+identificador);
                 enviarMensaje(new AutoId("Mi ID es:"+identificador));
             }
         } catch (SocketException e) {
@@ -215,7 +216,7 @@ public class Comunicacion extends Observable implements Runnable {
                     // VALIDAR QUE NO HAYA ERRORES CON LOS DATOS POR QUE EL
                     // PROCESO DE DESEREALIZACION PUEDE DEVOLVER NULL
                     if (objetoRecibido != null) {
-
+                            System.out.println("objeto diferente de null");
                         // SI OBJETO RECIBIDO ES UN AUTOID
                         if (objetoRecibido instanceof AutoId) {
                             AutoId mensaje = (AutoId) objetoRecibido;
@@ -224,6 +225,7 @@ public class Comunicacion extends Observable implements Runnable {
                             // ESTAMOS INTERESADOS UNICAMENTE EN LOS NUEVOS
                             // MIEMBROS QUE NO SE HAN IDENTIFICADO
                             if (mensajeContenido.contains("nuevo miembro")) {
+                                System.out.println("respuesta al saludo");
                                 respuestaSaludo();
                             }
                             // SI NECESITAMOS VALIDAR OTRO TIPO DE OBJETOS ESTE
