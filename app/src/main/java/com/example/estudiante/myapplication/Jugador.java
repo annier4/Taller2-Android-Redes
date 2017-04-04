@@ -16,6 +16,11 @@ public class Jugador implements Serializable {
         this.b = b;
     }
 
+    public Jugador() {
+
+    }
+
+
     public int getId() {
         return id;
     }

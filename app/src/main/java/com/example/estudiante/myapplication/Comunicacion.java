@@ -12,6 +12,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Observable;
 
+import comun.AutoId;
+
 /**
  * Created by estudiante on 29/03/17.
  */
@@ -26,7 +28,6 @@ public class Comunicacion extends Observable implements Runnable {
     private static Comunicacion ref;
 
     public Comunicacion() {
-
         try {
             System.out.println("iniciando socket en el puerto:" + puerto);
             // INICIALIZA EL MULTICAST SE HABRE LA PUERTA
@@ -57,16 +58,20 @@ public class Comunicacion extends Observable implements Runnable {
                 recibeRespuesta();
             }
             // SI YA SE IDENTIFICO ENVIA UN MENSAJE CON SU ID AL GRUPO
-            if(identificado){
-                System.out.println("Mi ID es:"+identificador);
-                enviarMensaje(new AutoId("Mi ID es:"+identificador));
+
+            if (identificado) {
+                System.out.println("Mi ID es:" + identificador);
+                enviarMensaje(new AutoId("Mi ID es:" + identificador));
             }
+
         } catch (SocketException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        new Thread(this).start();
 
     }
 
@@ -75,7 +80,7 @@ public class Comunicacion extends Observable implements Runnable {
         System.out.println("hola soy un nuevo miembro");
         AutoId mensaje = new AutoId("hola soy un nuevo miembro");
         byte[] bytes = serializa(mensaje);
-            enviarMensaje(bytes, ip, puerto);
+        enviarMensaje(bytes, ip, puerto);
 
     }
 
@@ -124,7 +129,7 @@ public class Comunicacion extends Observable implements Runnable {
     private void respuestaSaludo() {
         AutoId mensaje = new AutoId("Hola, yo soy:" + identificador);
         byte[] bytes = serializa(mensaje);
-            enviarMensaje(bytes, ip, puerto);
+        enviarMensaje(bytes, ip, puerto);
 
     }
 
@@ -142,7 +147,6 @@ public class Comunicacion extends Observable implements Runnable {
         } catch (IOException e) {
             // TODO: handle exception
             e.printStackTrace();
-            ;
         }
         return bytes;
     }
@@ -170,18 +174,17 @@ public class Comunicacion extends Observable implements Runnable {
     }
 
     public void enviarMensaje(byte[] data, InetAddress ip2, int puerto2) {
-        try{
+        try {
             DatagramPacket paquete = new DatagramPacket(data, data.length, ip, puerto2);
             //System.out.print(ip2+"....................................................................................................................................................................}");
             //System.out.println("Enviando dato a:" + ip2.getHostAddress() + ":" + puerto2);
             socket.send(paquete);
             System.out.println("Los datos fueron enviados");
 
-        }
-        catch(Exception e){
-         e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
 
-    }
+        }
         // TODO Auto-generated method stub
 
     }
@@ -202,9 +205,7 @@ public class Comunicacion extends Observable implements Runnable {
     }
 
     public void run() {
-
         while (true) {
-
             try {
                 // RECIBE
                 // DatagramPacket paqueteRecibido = recibeMensaje();
@@ -216,36 +217,35 @@ public class Comunicacion extends Observable implements Runnable {
                     // VALIDAR QUE NO HAYA ERRORES CON LOS DATOS POR QUE EL
                     // PROCESO DE DESEREALIZACION PUEDE DEVOLVER NULL
                     if (objetoRecibido != null) {
-                            System.out.println("objeto diferente de null");
+                        System.out.println("objeto diferente de null");
                         // SI OBJETO RECIBIDO ES UN AUTOID
                         if (objetoRecibido instanceof AutoId) {
                             AutoId mensaje = (AutoId) objetoRecibido;
                             String mensajeContenido = mensaje.getContenido();
-
                             // ESTAMOS INTERESADOS UNICAMENTE EN LOS NUEVOS
                             // MIEMBROS QUE NO SE HAN IDENTIFICADO
                             if (mensajeContenido.contains("nuevo miembro")) {
                                 System.out.println("respuesta al saludo");
                                 respuestaSaludo();
+                            } else {
+                                // SI NECESITAMOS VALIDAR OTRO TIPO DE OBJETOS ESTE
+                                // ES EL MOMENTO
+                                // NOTIFICAR A LOS AOBSERVADORES QUE HAN LLEGADO
+                                // NUEVOS DATOS Y TRANSMITIRLE LOS DATOS
+
+                                // If we need to validate other kind of objects this
+                                // is
+                                // the moment
+
+                                // Notify the observers that new data has arrived
+                                // and
+                                // pass
+                                // the data to them
+                                setChanged();
+                                notifyObservers(mensajeContenido);
+                                clearChanged();
                             }
-                            // SI NECESITAMOS VALIDAR OTRO TIPO DE OBJETOS ESTE
-                            // ES EL MOMENTO
-                            // NOTIFICAR A LOS AOBSERVADORES QUE HAN LLEGADO
-                            // NUEVOS DATOS Y TRANSMITIRLE LOS DATOS
-
-                            // If we need to validate other kind of objects this
-                            // is
-                            // the moment
-
-                            // Notify the observers that new data has arrived
-                            // and
-                            // pass
-                            // the data to them
-                            setChanged();
-                            notifyObservers(objetoRecibido);
-                            clearChanged();
                         }
-
                     }
                 }
 
@@ -263,10 +263,10 @@ public class Comunicacion extends Observable implements Runnable {
         return this.identificador;
     }
 
-    public static Comunicacion getInstance(){
-        if(ref==null){
-            ref= new Comunicacion();
-            Thread t =  new Thread(ref);
+    public static Comunicacion getInstance() {
+        if (ref == null) {
+            ref = new Comunicacion();
+            Thread t = new Thread(ref);
             t.start();
         }
         return ref;
@@ -274,9 +274,9 @@ public class Comunicacion extends Observable implements Runnable {
 
     public void enviarMensaje(Object mensaje) {
 
-            System.out.println("Enviar mensaje a Jugadores");
-            byte[] bytes = serializa(mensaje);
-            enviarMensaje(bytes, ip, puerto);
+        System.out.println("Enviar mensaje a Jugadores");
+        byte[] bytes = serializa(mensaje);
+        enviarMensaje(bytes, ip, puerto);
 
     }
 }

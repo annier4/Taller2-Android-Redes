@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Administrador</string>
+
+
+    <string-array name="usuarios">
+        <item>usuario 1</item>
+        <item>usuario 2</item>
+        <item>usuario 3</item>
+    </string-array>
+
+
+
 </resources>

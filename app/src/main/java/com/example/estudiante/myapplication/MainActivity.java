@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     Button enemigo;
     Button comida;
     Spinner usuarios;
+    private String resp;
 
 
     @Override
@@ -37,17 +38,19 @@ public class MainActivity extends AppCompatActivity implements Observer {
         comida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mensaje= "add:comida";
+                String mensaje = "add:comida";
                 com.getInstance().enviarMensaje(mensaje);
             }
         });
 
+        Bundle b = getIntent().getExtras();
+        resp = b.getString("resultado");
 
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.print("llego algo:"+arg);
+        System.out.print("llego algo:" + arg);
 
     }
 }

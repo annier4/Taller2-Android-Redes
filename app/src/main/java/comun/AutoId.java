@@ -1,4 +1,4 @@
-package com.example.estudiante.myapplication;
+package comun;
 
 import java.io.Serializable;
 
@@ -9,17 +9,18 @@ import java.io.Serializable;
 public class AutoId implements Serializable {
     private String contenido;
 
-    public AutoId(String contenido){
-        this.contenido=contenido;
+    public AutoId(String contenido) {
+        this.contenido = contenido;
 
 
     }
 
-    public String getContenido(){
+    public String getContenido() {
         return contenido;
     }
 
     public void setContenido(String contenido) {
         this.contenido = contenido;
     }
+
 }
