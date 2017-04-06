@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
     Spinner usuarios;
     private String resp;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,27 +29,36 @@ public class MainActivity extends AppCompatActivity implements Observer {
         enemigo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mensaje = "add:enemigo";
-                com.getInstance().enviarMensaje(mensaje);
+                final String mensaje = "add:enemigo";
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        com.getInstance().enviarMensaje(mensaje);
+                    }
+                }).start();
             }
         });
 
         comida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mensaje = "add:comida";
-                com.getInstance().enviarMensaje(mensaje);
+                final String mensaje = "add:comida";
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        com.getInstance().enviarMensaje(mensaje);
+                    }
+                }).start();
             }
         });
-
         Bundle b = getIntent().getExtras();
         resp = b.getString("resultado");
-
     }
 
     @Override
     public void update(Observable o, Object arg) {
         System.out.print("llego algo:" + arg);
-
     }
+
 }

@@ -11,8 +11,6 @@ public class AutoId implements Serializable {
 
     public AutoId(String contenido) {
         this.contenido = contenido;
-
-
     }
 
     public String getContenido() {

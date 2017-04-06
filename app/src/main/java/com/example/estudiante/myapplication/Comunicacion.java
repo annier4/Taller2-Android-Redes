@@ -26,6 +26,7 @@ public class Comunicacion extends Observable implements Runnable {
     private int identificador;
     private boolean identificado;
     private static Comunicacion ref;
+    private int idMaxConectado;
 
     public Comunicacion() {
         try {
@@ -52,7 +53,7 @@ public class Comunicacion extends Observable implements Runnable {
 
         try {
             // DEFINE CUANTO TIEMPO ESPERA
-            socket.setSoTimeout(5000);// 3 SEGUNDOS
+            socket.setSoTimeout(3000);// 3 SEGUNDOS
             // SI 'IDENTIFICADO' ES FALSO ENTONCES RECIBE RESPUESTA : Es decir aun no esta identificado indentifiquese
             while (!identificado) {
                 recibeRespuesta();
@@ -72,7 +73,6 @@ public class Comunicacion extends Observable implements Runnable {
         }
 
         new Thread(this).start();
-
     }
 
     private void saludarGrupo() {
@@ -81,7 +81,6 @@ public class Comunicacion extends Observable implements Runnable {
         AutoId mensaje = new AutoId("hola soy un nuevo miembro");
         byte[] bytes = serializa(mensaje);
         enviarMensaje(bytes, ip, puerto);
-
     }
 
     private void recibeRespuesta() throws Exception {
@@ -114,13 +113,12 @@ public class Comunicacion extends Observable implements Runnable {
         } catch (SocketTimeoutException e) {
             System.out.println("AutoId tiempo finalizado");
             if (identificador == 0) {
-                identificador = 1;
+                identificador = 0;
             }
             identificado = true;
             // SE TERMINA EL TIEMPO DE ESPERA
             socket.setSoTimeout(0);
             System.out.println("Mi AutoId es:" + identificador);
-
             // TODO: handle exception
         }
 
@@ -150,6 +148,7 @@ public class Comunicacion extends Observable implements Runnable {
         }
         return bytes;
     }
+
 
     private Object deserializa(byte[] bytes) {
         // TODO Auto-generated method stub
@@ -227,7 +226,11 @@ public class Comunicacion extends Observable implements Runnable {
                             if (mensajeContenido.contains("nuevo miembro")) {
                                 System.out.println("respuesta al saludo");
                                 respuestaSaludo();
-                            } else {
+                            } else if (mensajeContenido.contains("yo soy")) {
+
+                                int bufferId = Integer.parseInt(mensajeContenido.split(":")[1]);
+                                if (idMaxConectado < bufferId)
+                                    idMaxConectado = bufferId;
                                 // SI NECESITAMOS VALIDAR OTRO TIPO DE OBJETOS ESTE
                                 // ES EL MOMENTO
                                 // NOTIFICAR A LOS AOBSERVADORES QUE HAN LLEGADO
@@ -241,11 +244,16 @@ public class Comunicacion extends Observable implements Runnable {
                                 // and
                                 // pass
                                 // the data to them
-                                setChanged();
-                                notifyObservers(mensajeContenido);
-                                clearChanged();
                             }
+
+
+                            setChanged();
+                            notifyObservers();
+                            clearChanged();
+
                         }
+
+
                     }
                 }
 
@@ -278,5 +286,9 @@ public class Comunicacion extends Observable implements Runnable {
         byte[] bytes = serializa(mensaje);
         enviarMensaje(bytes, ip, puerto);
 
+    }
+
+    public int getIdMaxConectado() {
+        return idMaxConectado;
     }
 }

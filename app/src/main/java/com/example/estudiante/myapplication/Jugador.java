@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 
 public class Jugador implements Serializable {
-    private int id, r,g,b;
+    private int id, r, g, b;
 
     public Jugador(int id, int r, int g, int b) {
         this.id = id;
@@ -16,10 +16,13 @@ public class Jugador implements Serializable {
         this.b = b;
     }
 
+    public Jugador(int id) {
+        this.id = id;
+    }
+
     public Jugador() {
 
     }
-
 
     public int getId() {
         return id;
